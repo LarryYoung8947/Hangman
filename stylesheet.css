@@ -1,0 +1,87 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body{
+  height: 100vh;
+  width: 100vw;
+}
+
+
+#topLine {
+  position: absolute;
+  top: 5%;
+  left: 37%;
+}
+
+#sideLine {
+  position: absolute;
+  top: 5%;
+  right: 19%;
+}
+
+#bottomLine {
+  position: absolute;
+  bottom: 28%;
+  left: 15%;
+}
+
+#puzzleBoard {
+  display: grid;
+  grid-template-columns: auto;
+  position: absolute;
+  bottom: 9%;
+  left: 12%;
+  height: 10%;
+  width: 70%;
+}
+
+#guessLetter {
+  position: absolute;
+  top: 20%;
+  right: 3%;
+}
+
+#solvePuzzle {
+  position: absolute;
+  top: 40%;
+  right: 3%;
+}
+
+.character-item {
+  flex: auto;
+  grid-row: 1;
+  border: solid 1px black;
+  align-content: center stretch;
+}
+
+.character-item p {
+  height: 50%;
+  width: 50%;
+  text-align: center;
+  align-self: center;
+  justify-self: center;
+}
+
+.space-item {
+  grid-row: 1;
+  background-color: lightgray;
+  border: solid 1px black;
+}
+
+.controlButton {
+  height: 10%;
+  width: 15%;
+  background-color: firebrick;
+  border: outset 1px black;
+  color: white;
+}
+
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+.fadeInContainer {
+  opacity: 1;
+  animation-duration: 1s 0 1;
+  animation:fadeIn 2s ease-in 1;
+}

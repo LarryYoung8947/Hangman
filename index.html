@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="stylesheet.css">
+    <title>Hangman | 20/20</title>
+  </head>
+  <body>
+    <canvas id="topLine" class='line' width="700" height="50"></canvas>
+    <canvas id="sideLine" class='line' width="50" height="450"></canvas>
+    <canvas id="bottomLine" class='line' width="1100" height="50"></canvas>
+    <div class="fadeInContainer" id="puzzleBoard"></div>
+    <div class="fadeInContainer" id="scoreCard"></div>
+    <button class='controlButton' id='guessLetter' type="button" name="guessLetter">Guess Letter</button>
+    <button class='controlButton' id='solvePuzzle' type="button" name="solvePuzzle">Solve</button>
+    <script src='gameScript.js' type="text/javascript"></script>
+    <script src='jquery.js' type="text/javascript"></script>
+  </body>
+</html>
