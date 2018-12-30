@@ -4,6 +4,7 @@ alert('JS Passed');
 let topLine = document.getElementById('topLine');
 let sideLine = document.getElementById('sideLine');
 let bottomLine = document.getElementById('bottomLine');
+let scoreCard = document.getElementById('scoreCard');
 let ctxTop = topLine.getContext('2d');
 let ctxSide = sideLine.getContext('2d');
 let ctxBottom = bottomLine.getContext('2d');
@@ -177,10 +178,13 @@ let letterIndex = 0;
 
 let generateLetter = () => {
   let letterDiv = document.createElement('div');
+  let letter = document.createElement('p');
   letterDiv.classList.add('character-item');
-  letterDiv.setAttribute('id', `letter}`);
-  letterDiv.innerHTML = '<p>' + puzzle.phrase.charAt(letterIndex) + '</p>';
+  letterDiv.setAttribute('id', `letter${letterIndex}`);
+  letter.innerHTML = puzzle.phrase.charAt(letterIndex);
+  letter.style.cssText = 'display:none;justify-content:center;align-items:center;font-size:2rem;';
   puzzleContainer.appendChild(letterDiv);
+  letterDiv.appendChild(letter);
 }
 
 let puzzleContainer = document.getElementById('puzzleBoard')
@@ -195,9 +199,10 @@ let generateSpace = () => {
 
 let letterItems = 0;
 let spaceItems = 0;
+const puzzlePhrase = puzzle.phrase;
 
 let buildPuzzle = () => {
-  let puzzlePhrase = puzzle.phrase;
+
   for(let i=0; i<puzzlePhrase.length; i++) {
     if(puzzlePhrase.charAt(i) === ' '){
       generateSpace();
@@ -213,6 +218,43 @@ let buildPuzzle = () => {
     spaceItem.style.cssText = 'background-color:gray';
   }
 }
+
+//PROMPT A GUESS
+
+let userGuess;
+
+const guessButton = document.getElementById('guessLetter');
+
+guessButton.addEventListener('click', () => {
+  userGuess = prompt('Guess a letter!');
+  checkGuess();
+});
+
+let correctGuess = 0
+
+let checkGuess = () => {
+  for(let i = 0; i<puzzlePhrase.length; i++) {
+    if(userGuess.toLowerCase() === puzzlePhrase.charAt(i).toLowerCase()) {
+      $(`#letter${i} p`).fadeIn(1000);
+      $(`#letter${i} p`).css('display', 'inline-grid');
+      correctGuess+=1;
+    }
+  }
+  if(correctGuess === 0) {
+    let incorrectGuessDiv = document.createElement('div');
+    let incorrectGuess = document.createElement('p');
+    incorrectGuessDiv.classList.add('incorrectGuessItem');
+    incorrectGuess.innerHTML = userGuess.toUpperCase();
+    incorrectGuess.style.cssText = 'justify-content:center;align-items:center;font-size:1.5rem;text-align:center;overflow:hidden;';
+    scoreCard.appendChild(incorrectGuessDiv);
+    incorrectGuessDiv.appendChild(incorrectGuess);
+    //draw next stickman part//
+  }
+  correctGuess = 0;
+}
+
+
+
 
 
 

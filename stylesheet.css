@@ -8,7 +8,6 @@ body{
   width: 100vw;
 }
 
-
 #topLine {
   position: absolute;
   top: 5%;
@@ -49,22 +48,34 @@ body{
   right: 3%;
 }
 
-.character-item {
-  flex: auto;
-  grid-row: 1;
-  border: solid 1px black;
-  align-content: center stretch;
+#scoreCard {
+  display: grid;
+  grid-template-columns: repeat(5, auto);
+  grid-template-rows: repeat(5, auto);
+  border: solid 3px black;
+  height: 40%;
+  width: 25%;
+  position: absolute;
+  top: 10%;
+  left: 5%;
 }
 
-.character-item p {
-  height: 50%;
-  width: 50%;
-  text-align: center;
-  align-self: center;
-  justify-self: center;
+.character-item {
+  display:inline-grid;
+  grid-row: 1;
+  border: solid 1px black;
+  align-content: center;
+  overflow: hidden;
+}
+
+.incorrectGuessItem {
+  display:grid;
+  align-content: center;
+  overflow: hidden;
 }
 
 .space-item {
+  display: inline-grid;
   grid-row: 1;
   background-color: lightgray;
   border: solid 1px black;
