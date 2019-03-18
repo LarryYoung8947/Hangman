@@ -1,19 +1,17 @@
-alert('JS Passed');
-
 //INITIALIZE DRAW FUNCTIONS
-let topLine = document.getElementById('topLine');
-let sideLine = document.getElementById('sideLine');
-let bottomLine = document.getElementById('bottomLine');
-let scoreCard = document.getElementById('scoreCard');
-let ctxTop = topLine.getContext('2d');
-let ctxSide = sideLine.getContext('2d');
-let ctxBottom = bottomLine.getContext('2d');
-let fpsTop, fpsIntervalTop, startTimeTop, nowTop, thenTop, elapsedTop;
-let fpsSide, fpsIntervalSide, startTimeSide, nowSide, thenSide, elapsedSide;
-let fpsBottom, fpsIntervalBottom, startTimeBottom, nowBottom, thenBottom, elapsedBottom;
-let currentPointTop = 130;
-let currentPointSide = 11;
-let currentPointBottom = 33;
+let topLine = document.getElementById('topLine'),
+ sideLine = document.getElementById('sideLine'),
+ bottomLine = document.getElementById('bottomLine'),
+ scoreCard = document.getElementById('scoreCard'),
+ ctxTop = topLine.getContext('2d'),
+ ctxSide = sideLine.getContext('2d'),
+ ctxBottom = bottomLine.getContext('2d'),
+ currentPointTop = 130,
+ currentPointSide = 11,
+ currentPointBottom = 33,
+ fpsTop, fpsIntervalTop, startTimeTop, nowTop, thenTop, elapsedTop,
+ fpsSide, fpsIntervalSide, startTimeSide, nowSide, thenSide, elapsedSide,
+ fpsBottom, fpsIntervalBottom, startTimeBottom, nowBottom, thenBottom, elapsedBottom;
 
 
 
@@ -42,7 +40,7 @@ let drawTop = () => {
   requestAnimationFrame(drawTop);
   nowTop = performance.now();
   elapsedTop = nowTop - thenTop;
-  if(elapsedTop > fpsIntervalTop && currentPointTop < 650) {
+  if(elapsedTop > fpsIntervalTop && currentPointTop < 400) {
     thenTop = nowTop - (elapsedTop % fpsIntervalTop);
     ctxTop.clearRect(0,0,600,600);
     ctxTop.beginPath();
@@ -59,13 +57,13 @@ let drawSide = () => {
   requestAnimationFrame(drawSide);
   nowSide = performance.now();
   elapsedSide = nowSide - thenSide;
-  if(elapsedSide > fpsIntervalSide && currentPointSide < 485) {
+  if(elapsedSide > fpsIntervalSide && currentPointSide < 405) {
     thenSide = nowSide - (elapsedSide % fpsIntervalSide);
     ctxSide.clearRect(0,0,600,600);
     ctxSide.beginPath();
     ctxSide.moveTo(20, 10);
     ctxSide.lineTo(20, currentPointSide);
-    ctxSide.lineWidth = 5;
+    ctxSide.lineWidth = 7;
     ctxSide.strokeStyle = "black";
     ctxSide.stroke();
   }
@@ -78,11 +76,11 @@ let drawBottom = () => {
   elapsedBottom = nowBottom - thenBottom;
   if(elapsedBottom > fpsIntervalBottom && currentPointBottom < 985) {
     thenBottom = nowBottom - (elapsedBottom % fpsIntervalBottom);
-    ctxBottom.clearRect(0,0,600,600);
+    ctxBottom.clearRect(0,0,1000,1000);
     ctxBottom.beginPath();
     ctxBottom.moveTo(32, 20);
     ctxBottom.lineTo(currentPointBottom, 20);
-    ctxBottom.lineWidth = 5;
+    ctxBottom.lineWidth = 10;
     ctxBottom.strokeStyle = "black";
     ctxBottom.stroke();
   }
@@ -182,9 +180,16 @@ let generateLetter = () => {
   letterDiv.classList.add('character-item');
   letterDiv.setAttribute('id', `letter${letterIndex}`);
   letter.innerHTML = puzzle.phrase.charAt(letterIndex);
-  letter.style.cssText = 'display:none;justify-content:center;align-items:center;font-size:2rem;';
+  letter.style.cssText = 'display:none;justify-content:center;align-items:center;font-size:2rem;text-align:center;min-width:0;min-height:0;';
   puzzleContainer.appendChild(letterDiv);
   letterDiv.appendChild(letter);
+  let winWidth = window.innerWidth;
+
+  if(winWidth <= 780) {
+    letter.style.justifyContent = 'center';
+    letter.style.height = '50px';
+    letter.style.paddingBottom = '5px';
+  }
 }
 
 let puzzleContainer = document.getElementById('puzzleBoard')
@@ -217,11 +222,17 @@ let buildPuzzle = () => {
   for(let i=0; i<spaceItem.length; i++){
     spaceItem.style.cssText = 'background-color:gray';
   }
+
+  if(puzzle.numOfChar <= 7) {
+   puzzleBoard.style.width = '50%';
+   puzzleBoard.style.left = '25%';
+  }
 }
 
 //PROMPT A GUESS
 
 let userGuess;
+let headFlag = 0;
 
 const guessButton = document.getElementById('guessLetter');
 
@@ -231,6 +242,7 @@ guessButton.addEventListener('click', () => {
 });
 
 let correctGuess = 0
+let flag = 0;
 
 let checkGuess = () => {
   for(let i = 0; i<puzzlePhrase.length; i++) {
@@ -248,11 +260,34 @@ let checkGuess = () => {
     incorrectGuess.style.cssText = 'justify-content:center;align-items:center;font-size:1.5rem;text-align:center;overflow:hidden;';
     scoreCard.appendChild(incorrectGuessDiv);
     incorrectGuessDiv.appendChild(incorrectGuess);
-    //draw next stickman part//
+    let bodyPartList = document.getElementsByClassName('bodyPart');
+    bodyPartList[flag].classList.add('drawBodyPart');
+    if (flag === 0) {
+      let drawHead = document.getElementsByClassName('drawHead');
+      drawHead[0].classList.add('.drawBodyPart_drawHead');
+      drawHead[0].style.cssText = 'transform:rotate(270deg);transition: transform 1.8s linear;opacity:1'
+    } else if (flag === 1) {
+      bodyPartList[flag].style.width = '35%';
+    } else if (flag > 1 && flag <= 3) {
+      bodyPartList[flag].style.width = '20%';
+    } else {
+        bodyPartList[flag].style.width = '33%';
+    }
+    flag++
   }
   correctGuess = 0;
 }
 
+const solvePuzzle = document.getElementById('solvePuzzle');
+
+solvePuzzle.addEventListener('click', () => {
+  let solveAttempt = prompt('Take a stab at it...')
+  if (solveAttempt.toLowerCase() === puzzle.phrase.toLowerCase() ) {
+    alert('You Win!');
+  } else {
+    alert('That is not correct...');
+  }
+});
 
 
 
